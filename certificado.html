@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediNF — Cadastrar Certificado Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0f1117; --ink-soft: #3d3f4a; --ink-muted: #7c7f8e;
+    --surface: #f7f6f2; --white: #ffffff;
+    --accent: #1a6b4a; --accent-light: #e8f4ef;
+    --border: rgba(15,17,23,0.10); --radius: 16px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
+  .card { background: var(--white); border-radius: 24px; padding: 48px; max-width: 480px; width: 100%; border: 1px solid var(--border); }
+  .logo { font-family: 'Instrument Serif', serif; font-size: 28px; color: var(--ink); margin-bottom: 32px; }
+  .logo span { color: var(--accent); }
+  h1 { font-family: 'Instrument Serif', serif; font-size: 28px; letter-spacing: -0.5px; margin-bottom: 8px; }
+  p { color: var(--ink-soft); font-size: 15px; line-height: 1.6; margin-bottom: 32px; }
+  label { display: block; font-size: 13px; font-weight: 500; color: var(--ink-soft); margin-bottom: 8px; }
+  input[type="email"], input[type="password"] {
+    width: 100%; padding: 14px 16px; background: var(--surface);
+    border: 1.5px solid var(--border); border-radius: 12px;
+    font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--ink);
+    outline: none; margin-bottom: 16px; transition: border-color .2s;
+  }
+  input:focus { border-color: var(--accent); }
+  .upload-area {
+    border: 2px dashed var(--border); border-radius: 12px;
+    padding: 32px; text-align: center; cursor: pointer;
+    margin-bottom: 16px; transition: all .2s; background: var(--surface);
+  }
+  .upload-area:hover, .upload-area.dragover { border-color: var(--accent); background: var(--accent-light); }
+  .upload-area.selected { border-color: var(--accent); background: var(--accent-light); border-style: solid; }
+  .upload-icon { font-size: 40px; margin-bottom: 12px; }
+  .upload-text { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .upload-sub { font-size: 13px; color: var(--ink-muted); }
+  input[type="file"] { display: none; }
+  .btn {
+    width: 100%; background: var(--accent); color: var(--white);
+    border: none; cursor: pointer; padding: 16px;
+    border-radius: 100px; font-family: 'DM Sans', sans-serif;
+    font-size: 16px; font-weight: 500; margin-top: 8px;
+    transition: background .2s, opacity .2s;
+  }
+  .btn:hover { background: #2d8c62; }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .info { background: var(--accent-light); border-radius: 12px; padding: 16px; margin-bottom: 24px; font-size: 13px; color: var(--accent); line-height: 1.6; }
+  .step { display: flex; gap: 12px; margin-bottom: 16px; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .step-text { font-size: 14px; color: var(--ink-soft); padding-top: 4px; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  .success { text-align: center; display: none; }
+  .success-icon { font-size: 64px; margin-bottom: 16px; }
+  .success h2 { font-family: 'Instrument Serif', serif; font-size: 24px; margin-bottom: 8px; }
+  .success p { color: var(--ink-soft); }
+  .error-msg { background: #fef2f2; border-radius: 10px; padding: 12px 16px; color: #dc2626; font-size: 14px; margin-bottom: 16px; display: none; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">Medi<span>NF</span></div>
+
+  <!-- Formulário -->
+  <div id="form-section">
+    <h1>Cadastrar certificado</h1>
+    <p>Faça o upload do seu certificado digital (.pfx) para começar a emitir notas fiscais pelo app.</p>
+
+    <div class="info">
+      🔒 Seu certificado é criptografado com AWS KMS antes de ser armazenado. Nossa equipe não tem acesso à sua chave privada.
+    </div>
+
+    <div id="error-msg" class="error-msg"></div>
+
+    <label>E-mail da sua conta MediNF</label>
+    <input type="email" id="email" placeholder="seu@email.com">
+
+    <label>Senha da sua conta MediNF</label>
+    <input type="password" id="senha-conta" placeholder="••••••••">
+
+    <hr class="divider">
+
+    <label>Arquivo do certificado (.pfx)</label>
+    <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+      <div class="upload-icon">📁</div>
+      <div class="upload-text" id="upload-text">Clique ou arraste o arquivo .pfx aqui</div>
+      <div class="upload-sub" id="upload-sub">Somente arquivos .pfx são aceitos</div>
+    </div>
+    <input type="file" id="file-input" accept=".pfx">
+
+    <label>Senha do certificado</label>
+    <input type="password" id="senha-cert" placeholder="Senha do arquivo .pfx">
+
+    <button class="btn" id="btn-enviar" onclick="enviar()">Cadastrar certificado</button>
+  </div>
+
+  <!-- Sucesso -->
+  <div class="success" id="success-section">
+    <div class="success-icon">✅</div>
+    <h2>Certificado cadastrado!</h2>
+    <p>Abra o app MediNF no seu celular e comece a emitir notas fiscais.</p>
+  </div>
+</div>
+
+<script>
+  const API = "https://medinf-backend-production.up.railway.app";
+  let arquivoSelecionado = null;
+
+  // Drag and drop
+  const uploadArea = document.getElementById('upload-area');
+  uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file) selecionarArquivo(file);
+  });
+
+  document.getElementById('file-input').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) selecionarArquivo(file);
+  });
+
+  function selecionarArquivo(file) {
+    if (!file.name.endsWith('.pfx')) {
+      mostrarErro('Selecione um arquivo .pfx válido.');
+      return;
+    }
+    arquivoSelecionado = file;
+    uploadArea.classList.add('selected');
+    document.getElementById('upload-text').textContent = file.name;
+    document.getElementById('upload-sub').textContent = `${(file.size / 1024).toFixed(1)} KB`;
+  }
+
+  function mostrarErro(msg) {
+    const el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function esconderErro() {
+    document.getElementById('error-msg').style.display = 'none';
+  }
+
+  async function enviar() {
+    esconderErro();
+    const email = document.getElementById('email').value;
+    const senhaConta = document.getElementById('senha-conta').value;
+    const senhaCert = document.getElementById('senha-cert').value;
+    const btn = document.getElementById('btn-enviar');
+
+    if (!email || !senhaConta) { mostrarErro('Preencha e-mail e senha da conta.'); return; }
+    if (!arquivoSelecionado) { mostrarErro('Selecione o arquivo .pfx.'); return; }
+    if (!senhaCert) { mostrarErro('Digite a senha do certificado.'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+      // Login
+      const loginRes = await fetch(`${API}/api/v1/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha: senhaConta }),
+      });
+
+      if (!loginRes.ok) { mostrarErro('E-mail ou senha incorretos.'); return; }
+      const { access_token } = await loginRes.json();
+
+      // Upload
+      const formData = new FormData();
+      formData.append('arquivo', arquivoSelecionado);
+      formData.append('senha', senhaCert);
+
+      const uploadRes = await fetch(`${API}/api/v1/certificado/upload`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${access_token}` },
+        body: formData,
+      });
+
+      if (!uploadRes.ok) {
+        const err = await uploadRes.json();
+        mostrarErro(err.detail || 'Erro ao enviar certificado.');
+        return;
+      }
+
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('success-section').style.display = 'block';
+
+    } catch (e) {
+      mostrarErro('Erro de conexão. Tente novamente.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Cadastrar certificado';
+    }
+  }
+</script>
+</body>
+</html>
