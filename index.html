@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediNF — Notas fiscais sem dor</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0f1117; --ink-soft: #3d3f4a; --ink-muted: #7c7f8e;
+    --surface: #f7f6f2; --white: #ffffff;
+    --accent: #1a6b4a; --accent-light: #e8f4ef; --accent-mid: #2d8c62;
+    --border: rgba(15,17,23,0.10); --border-soft: rgba(15,17,23,0.06);
+    --radius: 16px; --radius-sm: 10px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; background: rgba(247,246,242,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-soft); }
+  .logo { font-family: 'Instrument Serif', serif; font-size: 22px; color: var(--ink); letter-spacing: -0.3px; }
+  .logo span { color: var(--accent); }
+  nav a { font-size: 14px; font-weight: 400; color: var(--ink-soft); text-decoration: none; transition: color .2s; }
+  nav a:hover { color: var(--ink); }
+  .nav-links { display: flex; gap: 36px; align-items: center; }
+  .btn-nav { background: var(--ink); color: var(--white) !important; padding: 10px 22px; border-radius: 100px; font-size: 14px; font-weight: 500; transition: background .2s, transform .15s; }
+  .btn-nav:hover { background: var(--accent) !important; transform: translateY(-1px); }
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 140px 48px 80px; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 60% 50% at 80% 50%, rgba(26,107,74,0.07) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 10% 80%, rgba(26,107,74,0.04) 0%, transparent 70%); }
+  .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: var(--accent-light); color: var(--accent); border: 1px solid rgba(26,107,74,0.2); padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 500; margin-bottom: 32px; position: relative; z-index: 1; opacity: 0; animation: fadeUp .6s .1s forwards; }
+  .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+  h1 { font-family: 'Instrument Serif', serif; font-size: clamp(48px, 6vw, 80px); line-height: 1.08; letter-spacing: -2px; max-width: 760px; position: relative; z-index: 1; opacity: 0; animation: fadeUp .7s .2s forwards; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub { margin-top: 28px; font-size: 18px; font-weight: 300; color: var(--ink-soft); max-width: 500px; line-height: 1.7; position: relative; z-index: 1; opacity: 0; animation: fadeUp .7s .35s forwards; }
+  .hero-actions { margin-top: 48px; display: flex; gap: 16px; align-items: center; position: relative; z-index: 1; opacity: 0; animation: fadeUp .7s .5s forwards; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: var(--white); padding: 16px 32px; border-radius: 100px; font-size: 16px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: background .2s, transform .15s, box-shadow .2s; box-shadow: 0 4px 24px rgba(26,107,74,0.25); }
+  .btn-primary:hover { background: var(--accent-mid); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(26,107,74,0.3); }
+  .btn-ghost { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-soft); font-size: 15px; text-decoration: none; padding: 16px 8px; transition: color .2s; }
+  .btn-ghost:hover { color: var(--ink); }
+  .hero-stats { margin-top: 80px; display: flex; gap: 48px; position: relative; z-index: 1; opacity: 0; animation: fadeUp .7s .65s forwards; }
+  .stat-item { display: flex; flex-direction: column; gap: 4px; }
+  .stat-num { font-family: 'Instrument Serif', serif; font-size: 36px; line-height: 1; letter-spacing: -1px; color: var(--ink); }
+  .stat-label { font-size: 13px; color: var(--ink-muted); font-weight: 400; }
+  .section { padding: 120px 48px; }
+  .section-label { display: inline-block; font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+  h2 { font-family: 'Instrument Serif', serif; font-size: clamp(36px, 4vw, 52px); letter-spacing: -1.5px; line-height: 1.1; max-width: 600px; margin-bottom: 64px; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); border-radius: var(--radius); overflow: hidden; }
+  .step { background: var(--white); padding: 48px 40px; position: relative; transition: background .2s; }
+  .step:hover { background: #fafaf8; }
+  .step-num { font-family: 'Instrument Serif', serif; font-size: 64px; line-height: 1; color: var(--border); font-style: italic; margin-bottom: 24px; }
+  .step h3 { font-size: 18px; font-weight: 500; margin-bottom: 12px; color: var(--ink); }
+  .step p { font-size: 15px; color: var(--ink-soft); line-height: 1.65; }
+  .step-icon { width: 44px; height: 44px; background: var(--accent-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; font-size: 20px; }
+  .pricing-section { padding: 120px 48px; background: var(--ink); color: var(--white); }
+  .pricing-section .section-label { color: #5db88a; }
+  .pricing-section h2 { color: var(--white); }
+  .pricing-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 56px; max-width: 560px; position: relative; overflow: hidden; }
+  .pricing-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), #5db88a); }
+  .price { display: flex; align-items: baseline; gap: 6px; margin: 32px 0 8px; }
+  .price-currency { font-size: 24px; font-weight: 300; color: rgba(255,255,255,0.5); margin-top: 6px; }
+  .price-value { font-family: 'Instrument Serif', serif; font-size: 80px; line-height: 1; letter-spacing: -3px; }
+  .price-period { font-size: 16px; color: rgba(255,255,255,0.4); font-weight: 300; }
+  .price-sub { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 40px; }
+  .features-list { list-style: none; display: flex; flex-direction: column; gap: 16px; margin-bottom: 48px; }
+  .features-list li { display: flex; align-items: center; gap: 12px; font-size: 15px; color: rgba(255,255,255,0.8); }
+  .check { width: 22px; height: 22px; flex-shrink: 0; background: rgba(26,107,74,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #5db88a; }
+  .btn-white { display: block; width: 100%; text-align: center; background: var(--white); color: var(--ink); padding: 18px 32px; border-radius: 100px; font-size: 16px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: background .2s, transform .15s; }
+  .btn-white:hover { background: var(--surface); transform: translateY(-1px); }
+  .pricing-note { text-align: center; margin-top: 20px; font-size: 13px; color: rgba(255,255,255,0.3); }
+  .checkout-section { padding: 120px 48px; }
+  .checkout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; max-width: 1000px; }
+  .checkout-info h2 { margin-bottom: 24px; }
+  .checkout-info p { color: var(--ink-soft); font-size: 16px; margin-bottom: 40px; }
+  .trust-items { display: flex; flex-direction: column; gap: 16px; }
+  .trust-item { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--ink-soft); }
+  .trust-icon { width: 36px; height: 36px; flex-shrink: 0; background: var(--accent-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .checkout-form { background: var(--white); border: 1px solid var(--border); border-radius: 24px; padding: 48px; }
+  .form-title { font-family: 'Instrument Serif', serif; font-size: 24px; margin-bottom: 32px; letter-spacing: -0.5px; }
+  .form-group { margin-bottom: 20px; }
+  label { display: block; font-size: 13px; font-weight: 500; color: var(--ink-soft); margin-bottom: 8px; letter-spacing: 0.2px; }
+  input, select { width: 100%; padding: 14px 16px; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--ink); outline: none; transition: border-color .2s, box-shadow .2s; -webkit-appearance: none; }
+  input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,107,74,0.1); }
+  input::placeholder { color: var(--ink-muted); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+  .form-section-label { font-size: 11px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 20px; }
+  .card-icons { display: flex; gap: 8px; margin-bottom: 16px; }
+  .card-icon { width: 40px; height: 26px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--ink-muted); }
+  .submit-btn { width: 100%; background: var(--accent); color: var(--white); border: none; cursor: pointer; padding: 18px 32px; border-radius: 100px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; margin-top: 8px; transition: background .2s, transform .15s, box-shadow .2s; box-shadow: 0 4px 24px rgba(26,107,74,0.25); }
+  .submit-btn:hover { background: var(--accent-mid); transform: translateY(-1px); box-shadow: 0 8px 32px rgba(26,107,74,0.3); }
+  .form-footer { text-align: center; margin-top: 16px; font-size: 12px; color: var(--ink-muted); }
+  .faq-section { padding: 100px 48px; background: var(--white); }
+  .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); border-radius: var(--radius); overflow: hidden; max-width: 900px; }
+  .faq-item { background: var(--white); padding: 36px 40px; }
+  .faq-item h4 { font-size: 15px; font-weight: 500; margin-bottom: 10px; color: var(--ink); }
+  .faq-item p { font-size: 14px; color: var(--ink-soft); line-height: 1.65; }
+  footer { padding: 48px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  footer p { font-size: 13px; color: var(--ink-muted); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s, transform .7s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; } .nav-links { gap: 20px; }
+    .hero { padding: 120px 24px 60px; } .hero-stats { gap: 28px; flex-wrap: wrap; }
+    .section, .pricing-section, .checkout-section, .faq-section { padding: 80px 24px; }
+    .steps { grid-template-columns: 1fr; } .checkout-grid { grid-template-columns: 1fr; gap: 48px; }
+    .faq-grid { grid-template-columns: 1fr; } footer { flex-direction: column; gap: 12px; text-align: center; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+    <nav>
+  <div class="logo">Medi<span>NF</span></div>
+  <div class="nav-links">
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#plano">Plano</a>
+    <a href="#faq">Dúvidas</a>
+    <a href="#assinar" class="btn-nav">Assinar agora</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-tag">Para médicos que atendem particular</div>
+  <h1>Nota fiscal em<br><em>segundos,</em><br>não em minutos.</h1>
+  <p class="hero-sub">Mande um print do prontuário ou digite os dados. A IA extrai tudo e emite a NF direto na prefeitura. Simples assim.</p>
+  <div class="hero-actions">
+    <a href="#assinar" class="btn-primary">
+      Começar por R$&nbsp;59,90/mês
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="#como-funciona" class="btn-ghost">Ver como funciona</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item"><span class="stat-num">30s</span><span class="stat-label">para emitir uma NF</span></div>
+    <div class="stat-item"><span class="stat-num">100+</span><span class="stat-label">municípios suportados</span></div>
+    <div class="stat-item"><span class="stat-num">R$0</span><span class="stat-label">taxa por nota emitida</span></div>
+  </div>
+</section>
+
+<section class="section" id="como-funciona">
+  <span class="section-label reveal">Como funciona</span>
+  <h2 class="reveal">Três passos e a nota está emitida.</h2>
+  <div class="steps reveal">
+    <div class="step"><div class="step-num">01</div><div class="step-icon">📸</div><h3>Mande os dados</h3><p>Tire uma foto do prontuário, mande um print ou apenas digite o nome, CPF e valor do paciente.</p></div>
+    <div class="step"><div class="step-num">02</div><div class="step-icon">✦</div><h3>A IA preenche tudo</h3><p>Nossa inteligência artificial extrai os dados automaticamente e preenche o formulário da nota fiscal.</p></div>
+    <div class="step"><div class="step-num">03</div><div class="step-icon">✓</div><h3>Revise e confirme</h3><p>Você confere os dados em uma tela de revisão e confirma. A NF é emitida direto na prefeitura.</p></div>
+  </div>
+</section>
+
+<section class="pricing-section" id="plano">
+  <span class="section-label reveal">Plano único</span>
+  <h2 class="reveal">Sem surpresas,<br>sem taxa por nota.</h2>
+  <div class="pricing-card reveal">
+    <p style="color:rgba(255,255,255,0.5); font-size:14px;">Plano Médico</p>
+    <div class="price">
+      <span class="price-currency">R$</span>
+      <span class="price-value">59</span>
+      <span class="price-value" style="font-size:40px;">,90</span>
+      <span class="price-period">/mês</span>
+    </div>
+    <p class="price-sub">Cancele quando quiser. Sem fidelidade.</p>
+    <ul class="features-list">
+      <li><span class="check">✓</span> Emissão ilimitada de NFS-e</li>
+      <li><span class="check">✓</span> Extração de dados por imagem com IA</li>
+      <li><span class="check">✓</span> Suporte a CPF e CNPJ</li>
+      <li><span class="check">✓</span> Múltiplos municípios</li>
+      <li><span class="check">✓</span> Relatório mensal para o contador (CSV)</li>
+      <li><span class="check">✓</span> Alerta de vencimento do certificado digital</li>
+      <li><span class="check">✓</span> App para Android e iOS</li>
+      <li><span class="check">✓</span> Suporte por WhatsApp</li>
+    </ul>
+    <a href="#assinar" class="btn-white">Assinar agora</a>
+    <p class="pricing-note">Cobrança via cartão de crédito. Renovação automática mensal.</p>
+  </div>
+</section>
+
+<section class="checkout-section" id="assinar">
+  <div class="checkout-grid">
+    <div class="checkout-info">
+      <span class="section-label reveal">Comece hoje</span>
+      <h2 class="reveal">Assine e baixe<br>o app em minutos.</h2>
+      <p class="reveal">Após a confirmação do pagamento, você recebe um e-mail com o link para baixar o app.</p>
+      <div class="trust-items reveal">
+        <div class="trust-item"><div class="trust-icon">🔒</div><span>Pagamento seguro via Pagar.me.</span></div>
+        <div class="trust-item"><div class="trust-icon">↩</div><span>Cancele quando quiser direto pelo app.</span></div>
+        <div class="trust-item"><div class="trust-icon">📱</div><span>Disponível para iPhone e Android.</span></div>
+        <div class="trust-item"><div class="trust-icon">💬</div><span>Suporte humano por WhatsApp.</span></div>
+      </div>
+    </div>
+    <div class="checkout-form reveal">
+      <p class="form-title">Criar conta e assinar</p>
+      <form id="checkout-form" onsubmit="handleSubmit(event)">
+        <div class="form-section-label">Seus dados</div>
+        <div class="form-group"><label>Nome completo</label><input type="text" placeholder="Dr. João Silva" required></div>
+        <div class="form-group"><label>E-mail</label><input type="email" id="email-input" placeholder="joao@email.com" required></div>
+        <div class="form-row">
+          <div class="form-group"><label>CPF / CNPJ</label><input type="text" placeholder="000.000.000-00" required></div>
+          <div class="form-group"><label>CRM (opcional)</label><input type="text" placeholder="12345-CE"></div>
+        </div>
+        <div class="form-group"><label>Município principal</label><input type="text" placeholder="Ex: Juazeiro do Norte - CE" required></div>
+        <hr class="form-divider">
+        <div class="form-section-label">Pagamento</div>
+        <div class="card-icons">
+          <div class="card-icon">VISA</div><div class="card-icon">MC</div>
+          <div class="card-icon">ELO</div><div class="card-icon">AMEX</div>
+        </div>
+        <div class="form-group"><label>Número do cartão</label><input type="text" placeholder="0000 0000 0000 0000" maxlength="19" id="card-number"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Validade</label><input type="text" placeholder="MM/AA" maxlength="5"></div>
+          <div class="form-group"><label>CVV</label><input type="text" placeholder="000" maxlength="4"></div>
+        </div>
+        <div class="form-group"><label>Nome no cartão</label><input type="text" placeholder="JOAO DA SILVA"></div>
+        <button type="submit" class="submit-btn" id="submit-btn">Assinar por R$ 59,90/mês</button>
+        <p class="form-footer">🔒 Ambiente seguro · Seus dados são criptografados</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="faq-section" id="faq">
+  <span class="section-label reveal">Dúvidas frequentes</span>
+  <h2 class="reveal">Perguntas e respostas.</h2>
+  <div class="faq-grid reveal">
+    <div class="faq-item"><h4>Precisa de certificado digital?</h4><p>Sim. Para emitir NFS-e você precisa de um e-CPF ou e-CNPJ válido. O app te orienta no processo.</p></div>
+    <div class="faq-item"><h4>Funciona no meu município?</h4><p>Suportamos mais de 100 municípios via integração com a Focus NFe.</p></div>
+    <div class="faq-item"><h4>Posso cancelar a qualquer momento?</h4><p>Sim. Sem fidelidade, sem multa. Cancele pelo app quando quiser.</p></div>
+    <div class="faq-item"><h4>Como a IA extrai os dados?</h4><p>Você manda uma foto ou print. Nossa IA lê e preenche nome, CPF e valor automaticamente.</p></div>
+    <div class="faq-item"><h4>Funciona para CNPJ também?</h4><p>Sim. Suportamos médicos autônomos com e-CPF e clínicas com e-CNPJ.</p></div>
+    <div class="faq-item"><h4>E o relatório para o contador?</h4><p>Todo mês você exporta um CSV com todas as NFs emitidas para enviar ao contador.</p></div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">Medi<span>NF</span></div>
+  <p>© 2025 MediNF · Todos os direitos reservados</p>
+  <p>contato@medinf.com.br</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  document.getElementById('card-number')?.addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g, '').substring(0, 16);
+    e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const emailParam = params.get('email');
+  if (emailParam) {
+    const emailInput = document.getElementById('email-input');
+    if (emailInput) emailInput.value = emailParam;
+    setTimeout(() => { document.getElementById('assinar')?.scrollIntoView({ behavior: 'smooth' }); }, 400);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.textContent = 'Processando...';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+    setTimeout(() => {
+      btn.textContent = '✓ Assinatura confirmada! Verifique seu e-mail.';
+      btn.style.background = '#1a6b4a';
+      btn.style.opacity = '1';
+    }, 1800);
+  }
+</script>
+</body>
+</html>
