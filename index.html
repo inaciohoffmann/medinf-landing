@@ -182,38 +182,19 @@
       <h2 class="reveal">Assine e baixe<br>o app em minutos.</h2>
       <p class="reveal">Após a confirmação do pagamento, você recebe um e-mail com o link para baixar o app.</p>
       <div class="trust-items reveal">
-        <div class="trust-item"><div class="trust-icon">🔒</div><span>Pagamento seguro via Pagar.me.</span></div>
+        <div class="trust-item"><div class="trust-icon">🔒</div><span>Pagamento seguro via Mercado Pago.</span></div>
         <div class="trust-item"><div class="trust-icon">↩</div><span>Cancele quando quiser direto pelo app.</span></div>
         <div class="trust-item"><div class="trust-icon">📱</div><span>Disponível para iPhone e Android.</span></div>
         <div class="trust-item"><div class="trust-icon">💬</div><span>Suporte humano por WhatsApp.</span></div>
       </div>
     </div>
     <div class="checkout-form reveal">
-      <p class="form-title">Criar conta e assinar</p>
-      <form id="checkout-form" onsubmit="handleSubmit(event)">
-        <div class="form-section-label">Seus dados</div>
-        <div class="form-group"><label>Nome completo</label><input type="text" placeholder="Dr. João Silva" required></div>
-        <div class="form-group"><label>E-mail</label><input type="email" id="email-input" placeholder="joao@email.com" required></div>
-        <div class="form-row">
-          <div class="form-group"><label>CPF / CNPJ</label><input type="text" placeholder="000.000.000-00" required></div>
-          <div class="form-group"><label>CRM (opcional)</label><input type="text" placeholder="12345-CE"></div>
-        </div>
-        <div class="form-group"><label>Município principal</label><input type="text" placeholder="Ex: Juazeiro do Norte - CE" required></div>
-        <hr class="form-divider">
-        <div class="form-section-label">Pagamento</div>
-        <div class="card-icons">
-          <div class="card-icon">VISA</div><div class="card-icon">MC</div>
-          <div class="card-icon">ELO</div><div class="card-icon">AMEX</div>
-        </div>
-        <div class="form-group"><label>Número do cartão</label><input type="text" placeholder="0000 0000 0000 0000" maxlength="19" id="card-number"></div>
-        <div class="form-row">
-          <div class="form-group"><label>Validade</label><input type="text" placeholder="MM/AA" maxlength="5"></div>
-          <div class="form-group"><label>CVV</label><input type="text" placeholder="000" maxlength="4"></div>
-        </div>
-        <div class="form-group"><label>Nome no cartão</label><input type="text" placeholder="JOAO DA SILVA"></div>
-        <button type="submit" class="submit-btn" id="submit-btn">Assinar por R$ 59,90/mês</button>
-        <p class="form-footer">🔒 Ambiente seguro · Seus dados são criptografados</p>
-      </form>
+      <p class="form-title">Comece em minutos</p>
+      <p style="font-size: 16px; color: var(--ink-soft); margin-bottom: 32px; line-height: 1.6;">Baixe o app, crie sua conta e emita sua primeira nota em menos de 2 minutos.</p>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <a href="#" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--ink); color: var(--white); padding: 16px 32px; border-radius: 100px; font-size: 16px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: background .2s, transform .15s, box-shadow .2s; box-shadow: 0 4px 24px rgba(15,17,23,0.25);" onmouseover="this.style.background='var(--accent)'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='var(--ink)'; this.style.transform='translateY(0)';">🍎 Baixar para iPhone</a>
+        <a href="#" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--accent); color: var(--white); padding: 16px 32px; border-radius: 100px; font-size: 16px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: background .2s, transform .15s, box-shadow .2s; box-shadow: 0 4px 24px rgba(26,107,74,0.25);" onmouseover="this.style.background='var(--accent-mid)'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='var(--accent)'; this.style.transform='translateY(0)';">🤖 Baixar para Android</a>
+      </div>
     </div>
   </div>
 </section>
