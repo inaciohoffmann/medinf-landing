@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidade — MediNF</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0f1117; --ink-soft: #3d3f4a; --ink-muted: #7c7f8e;
+    --surface: #f7f6f2; --white: #ffffff;
+    --accent: #1a6b4a; --border: rgba(15,17,23,0.10);
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); line-height: 1.7; }
+  header { background: var(--white); border-bottom: 1px solid var(--border); padding: 20px 24px; }
+  .logo { font-family: 'Instrument Serif', serif; font-size: 22px; color: var(--ink); text-decoration: none; }
+  .logo span { color: var(--accent); }
+  main { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+  h1 { font-family: 'Instrument Serif', serif; font-size: 36px; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .date { color: var(--ink-muted); font-size: 14px; margin-bottom: 40px; }
+  h2 { font-size: 18px; font-weight: 600; color: var(--ink); margin: 32px 0 12px; }
+  p { color: var(--ink-soft); margin-bottom: 16px; font-size: 15px; }
+  ul { color: var(--ink-soft); margin: 0 0 16px 20px; font-size: 15px; }
+  li { margin-bottom: 8px; }
+  a { color: var(--accent); }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+  footer { text-align: center; color: var(--ink-muted); font-size: 13px; padding: 32px 24px; }
+</style>
+</head>
+<body>
+<header>
+  <a href="/" class="logo">Medi<span>NF</span></a>
+</header>
+<main>
+  <h1>Política de Privacidade</h1>
+  <p class="date">Última atualização: abril de 2026</p>
+
+  <p>A <strong>Hoff Systems</strong> ("nós", "nosso" ou "MediNF") está comprometida em proteger a privacidade dos médicos e profissionais de saúde que utilizam nosso aplicativo. Esta Política de Privacidade descreve como coletamos, usamos e protegemos suas informações.</p>
+
+  <hr class="divider">
+
+  <h2>1. Informações que Coletamos</h2>
+  <p>Coletamos as seguintes informações quando você usa o MediNF:</p>
+  <ul>
+    <li><strong>Dados de cadastro:</strong> nome completo, e-mail, CPF/CNPJ e CRM</li>
+    <li><strong>Dados do município:</strong> município de atuação para emissão de NFS-e</li>
+    <li><strong>Certificado digital:</strong> arquivo .pfx criptografado com chave AWS KMS</li>
+    <li><strong>Dados das notas fiscais:</strong> nome e CPF do paciente, valor e descrição do serviço</li>
+    <li><strong>Dados de pagamento:</strong> processados pelo Mercado Pago — não armazenamos dados de cartão</li>
+  </ul>
+
+  <h2>2. Como Usamos suas Informações</h2>
+  <p>Utilizamos suas informações exclusivamente para:</p>
+  <ul>
+    <li>Emitir notas fiscais de serviço (NFS-e) em seu nome junto às prefeituras</li>
+    <li>Gerenciar sua assinatura e processar pagamentos</li>
+    <li>Enviar notificações sobre o vencimento do certificado digital e da assinatura</li>
+    <li>Fornecer suporte técnico</li>
+    <li>Cumprir obrigações legais e fiscais</li>
+  </ul>
+
+  <h2>3. Proteção do Certificado Digital</h2>
+  <p>Seu certificado digital (.pfx) é protegido com criptografia de nível militar usando o serviço <strong>AWS Key Management Service (KMS)</strong>. O arquivo é criptografado antes de ser armazenado e somente descriptografado no momento da emissão da nota fiscal. Nossa equipe não tem acesso à sua chave privada.</p>
+
+  <h2>4. Compartilhamento de Dados</h2>
+  <p>Compartilhamos seus dados apenas com:</p>
+  <ul>
+    <li><strong>Focus NFe:</strong> para emissão das notas fiscais junto às prefeituras</li>
+    <li><strong>Mercado Pago:</strong> para processamento de pagamentos</li>
+    <li><strong>Prefeituras municipais:</strong> dados necessários para emissão da NFS-e</li>
+    <li><strong>Autoridades competentes:</strong> quando exigido por lei</li>
+  </ul>
+  <p>Não vendemos, alugamos ou compartilhamos seus dados com terceiros para fins comerciais.</p>
+
+  <h2>5. Retenção de Dados</h2>
+  <p>Mantemos seus dados pelo tempo necessário para cumprir as finalidades descritas nesta política e para atender às obrigações legais. As notas fiscais emitidas são armazenadas por 5 anos conforme exigência fiscal.</p>
+
+  <h2>6. Seus Direitos</h2>
+  <p>Você tem direito a:</p>
+  <ul>
+    <li>Acessar os dados que temos sobre você</li>
+    <li>Corrigir dados incorretos</li>
+    <li>Solicitar a exclusão da sua conta e dados</li>
+    <li>Portabilidade dos seus dados</li>
+    <li>Revogar consentimentos anteriores</li>
+  </ul>
+  <p>Para exercer esses direitos, entre em contato: <a href="mailto:oi@medinf.com.br">oi@medinf.com.br</a></p>
+
+  <h2>7. Segurança</h2>
+  <p>Adotamos medidas técnicas e organizacionais para proteger seus dados, incluindo criptografia em trânsito (HTTPS/TLS), criptografia em repouso (AWS KMS), autenticação via JWT, rate limiting e Row Level Security no banco de dados.</p>
+
+  <h2>8. Cookies</h2>
+  <p>O aplicativo MediNF não utiliza cookies. Nosso site pode utilizar cookies essenciais para funcionamento básico.</p>
+
+  <h2>9. Menores de Idade</h2>
+  <p>O MediNF é destinado exclusivamente a profissionais de saúde maiores de 18 anos. Não coletamos intencionalmente dados de menores.</p>
+
+  <h2>10. Alterações nesta Política</h2>
+  <p>Podemos atualizar esta política periodicamente. Notificaremos você por e-mail sobre mudanças significativas. O uso continuado do aplicativo após as alterações constitui aceitação da nova política.</p>
+
+  <h2>11. Contato</h2>
+  <p>Para dúvidas sobre esta política de privacidade:</p>
+  <ul>
+    <li><strong>E-mail:</strong> <a href="mailto:oi@medinf.com.br">oi@medinf.com.br</a></li>
+    <li><strong>WhatsApp:</strong> <a href="https://wa.me/5588981308406">+55 88 98130-8406</a></li>
+    <li><strong>Empresa:</strong> Hoff Systems — CPF 433.043.558-63</li>
+  </ul>
+</main>
+<footer>
+  © 2026 MediNF · Hoff Systems · <a href="/privacidade.html">Privacidade</a> · <a href="/termos.html">Termos</a>
+</footer>
+</body>
+</html>
